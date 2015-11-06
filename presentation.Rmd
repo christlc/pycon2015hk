@@ -5,18 +5,23 @@ date: "November 7, 2015"
 output: ioslides_presentation
 ---
 
-## Abstract
+## Using Python for Data Mining
+
+When you are stuck in front of a computer without internet access, 
+how you get some data out, play with it and gain some insights.  
+
+
+Slides can be obtained here:
+
+[http://github.com/christlc/pycon2015hk](http://github.com/christlc/pycon2015hk)
+
+>1. Get started in Python
+>2. Be a Database Explorer 
+>3. Data wrangling - SQLAlchemy and Pandas
+>4. Using R style formula in regression.
 
 
 
-## Plan
-
-0. Get started in Python
-1. Be a Database Explorer 
-  - inspect what's in a database with SQLAlchemy
-  - load data in a Pandas dataframe
-2. Data wrangling - SQLAlchemy and Pandas
-3. R style formula in regression.
 
 # Get started in Python
 
@@ -38,27 +43,28 @@ Under Linux/Mac, running
 ```{bash, engine='bash', comment='Bash>', eval=FALSE}
 bash Anaconda-2.3.0-Platform-x86_64.sh
 ```
-
+-->
 
 ## IPython(Jupyter) notebook
 
+Fire up ipython notebook and you can get an interactive data analysis environment.
 
 ```{bash, engine='bash', comment='Bash>', eval=FALSE}
-ipython notebook 
+ipython notebook
 ```
 
-```{bash, engine='bash', comment='Bash>', eval=FALSE}
-ipython notebook --ip=*
-```
--->
+<img src="./assets/ipython_notebook.png" height="200">
+
 
 # Be a Database Explorer 
 
+<!--
 ## Database Explorer
 
 What's inside the database?
 
 ![Database Explorer Example](assets/dbexplorer_screenshot.png)
+-->
 
 ## Reflect database schema
 
@@ -69,10 +75,9 @@ What is the database structure?
 ```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7'}
 import sqlalchemy
 
+### <b>
 # http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html
 engine = sqlalchemy.create_engine('sqlite:///flightdata.sqlite3')
-
-### <b>
 meta = sqlalchemy.MetaData()
 meta.reflect(bind=engine)
 ### </b>
@@ -90,34 +95,37 @@ print(meta.tables['flights'])
 ### </b>
 ```
 
-Table('flights', MetaData(bind=None), 
-Column('year', INTEGER(), table=<flights>), 
-Column('month', INTEGER(), table=<flights>), 
-Column('day', INTEGER(), table=<flights>), 
-Column('dep_time', INTEGER(), table=<flights>), 
-Column('dep_delay', REAL(), table=<flights>), 
-Column('arr_time', INTEGER(), table=<flights>), 
-Column('arr_delay', REAL(), table=<flights>), 
-Column('carrier', TEXT(), table=<flights>), 
-Column('tailnum', TEXT(), table=<flights>), 
-Column('flight', INTEGER(), table=<flights>), 
-Column('origin', TEXT(), table=<flights>), 
-Column('dest', TEXT(), table=<flights>), 
-Column('air_time', REAL(), table=<flights>), 
-Column('distance', REAL(), table=<flights>), 
-Column('hour', REAL(), table=<flights>), 
-Column('minute', REAL(), table=<flights>), schema=None)
 
-## Lets get the first 10 rows for inspection
+Table('flights', MetaData(bind=None),  
+Column('year', INTEGER(), table=<flights>),   
+Column('month', INTEGER(), table=<flights>),  
+Column('day', INTEGER(), table=<flights>),  
+Column('dep_time', INTEGER(), table=<flights>),  
+Column('dep_delay', REAL(), table=<flights>),  
+Column('carrier', TEXT(), table=<flights>),  
+...
+
+<!--
+Column('arr_time', INTEGER(), table=<flights>),  
+Column('arr_delay', REAL(), table=<flights>),  
+Column('tailnum', TEXT(), table=<flights>),  
+Column('flight', INTEGER(), table=<flights>),   
+Column('origin', TEXT(), table=<flights>),  
+Column('dest', TEXT(), table=<flights>),  
+Column('air_time', REAL(), table=<flights>),   
+Column('distance', REAL(), table=<flights>),  
+Column('hour', REAL(), table=<flights>),  
+Column('minute', REAL(), table=<flights>), schema=None)-->
+
+## Lets download the data
 
 - We can then quickly download the data as Pandas dataframe.
 
 ```{r, engine='python', results='asis', comment='', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
 import pandas as pd
 ### <b>
-flight_sample = pd.read_sql(
-  'select year, month, day, carrier, dep_delay,'
-  ' from flights limit 10',
+alldata = pd.read_sql(
+  'select * from flights',
   engine)
 ### </b>
 ```
@@ -141,8 +149,6 @@ print(tabulate(flight_sample.head(), headers='keys'))
 
 ## What is the longest delay?
 
-
-
 ![Long Delay](assets/long_delay_from_flickr.jpg)
 
 By Omar Parada (Under CC license) [Flickr](https://www.flickr.com/photos/omarparada/8516269783/in/photolist-dYy7iD-kx8Qau-cGXUWC-5b2Wne-o6oy9z-d1NSAd-7HXoxD-pLecy1-6jghcK-6TojX-pq9bTV-81V1Jd-7LpH5j-945QS9-27kysx-qcatLg-iCHur-e52P9o-dZ1i7d-j9wxGw-ucDQgE-5Qa5ku-dhLoj-qxG79-fzwUaz-6tcffp-8mgSq5-4WHjnp-9h63Ep-cLmryh-ie3gM-p8RH-8VVTxX-4VXssb-7yNmEX-af8Md2-cSmEuU-7yNmSF-2dSugs-47eRe3-hvZT6M-fE4skk-fDkX2q-2fta69-gQPUSW-g5cmRX-akpL9o-nRftED-nk5YFq-cP7wus
@@ -153,7 +159,7 @@ By Omar Parada (Under CC license) [Flickr](https://www.flickr.com/photos/omarpar
 Pandas provides data structure like DataFrame and a set of functions to transform the data. 
 ```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
 # First load all the data into a dataframe
-alldata = pd.read_sql('select year, month, day, carrier, dep_delay from flights',
+alldata = pd.read_sql('select * from flights',
                       engine)
 
 ### <b>
@@ -178,33 +184,16 @@ print(tabulate(result, headers='keys') )
 ### </b>
 ```
 
-
-
-## What is the longest delay?
-
-Lets try different ways answering this query:
-
-1. SQL queries
-2. Using SQLAlchemy blocks to build queries
-3. Load the entire thing into Pandas
-
-
-
-
-
 ## SQLAlchemy expression
 
 ```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
+from sqlalchemy.sql import select, func
 ### <b>
 flights_table = meta.tables['flights']
-myquery = select([flights_table.c.year,
-                  flights_table.c.month,
-                  flights_table.c.day,
-                  flights_table.c.carrier,
-                  flights_table.c.dep_delay])
+myquery = select([flights_table])
 myquery = myquery.order_by(flights_table.c.dep_delay.desc())
 myquery = myquery.limit(10)
-print(tabulate(pd.read_sql(myquery, engine), headers='keys') )
+pd.read_sql(myquery, engine)
 ### </b>
 ```
 
@@ -235,9 +224,9 @@ print(tabulate(pd.read_sql(myquery, engine), headers='keys') )
 ```
 
 ## SQLAlchemy expression (continuted)
-You can also obtain the SQL statement by printing the query.
-
-```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
+<!-- You can also obtain the SQL statement by printing the query.
+-->
+```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=FALSE}
 ### <b>
 print(myquery)
 ### </b>
@@ -264,10 +253,18 @@ myquery = select([flights_table.c.year,
                   flights_table.c.dep_delay])
 myquery = myquery.order_by(flights_table.c.dep_delay.desc())
 myquery = myquery.limit(10)
-print(myquery)
+#print(myquery)
 ### </b>
 ```
 
+
+Equivalent to running: 
+```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
+### <b>
+pd.read_sql('select * from flights order by dep_delay desc limit 10',
+            engine)
+### </b>
+```
 
 
 <!--
@@ -284,104 +281,74 @@ Personal opinion:
 >- For something longer term: SQL expression and Pandas
 -->
 
-## Extra: do it with dplyr in R
-SQLAlchemy in Python vs dplyr in R
-
-```{r, warning=FALSE, eval=FALSE}
-library(dplyr)
-flightdb <- src_sqlite("./flightdata.sqlite3")
-flight_table <- tbl(flightdb, "flights")
-### <b>
-flight_table %>% 
-  select(year, month, day, carrier, dep_delay) %>%
-  arrange(desc(dep_delay)) %>% head(10)
-### </b>
-```
-
-```{r, warning=FALSE, message=FALSE, echo=FALSE, results='asis'}
-library(dplyr)
-library(knitr)
-flightdb <- src_sqlite("./flightdata.sqlite3")
-flight_table <- tbl(flightdb, "flights")
-### <b>
-flight_table %>% 
-  select(year, month, day, carrier, dep_delay) %>%
-  arrange(desc(dep_delay)) %>% head(10) %>% kable()
-### </b>
-```
-
-
-# Lets play a bit with pivot table
-
-## Pivot table is useful
-Pivot table is essentially a group by and aggregate functions.
-
-```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
-alldata = pd.read_sql('select * from flights', engine)
-alldata['dayofweek'] = alldata.apply(
-  lambda x: datetime(x.year,x.month,x.day).date().isoweekday(), axis=1)
-### <b>
-# Pivot table
-output = pd.pivot_table(alldata, index=['dayofweek'], 
-                        values=['dep_delay'], aggfunc=np.mean)
-# Group by
-output = alldata.groupby('dayofweek').dep_delay.mean()
-### </b>
-```
-
-We find the average delay of each day of week. 
-
-## Pivot table is useful
-
-```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=TRUE, echo=FALSE, results='asis'}
-import sqlalchemy
-import pandas as pd
-from tabulate import tabulate
-from datetime import datetime 
-
-engine = sqlalchemy.create_engine('sqlite:///flightdata.sqlite3')
-
-alldata = pd.read_sql('select * from flights', engine)
-alldata['dayofweek'] = alldata.apply(
-  lambda x: datetime(x.year,x.month,x.day).date().isoweekday(), axis=1)
-### <b>
-# Group by
-output = alldata.groupby('dayofweek').dep_delay.mean().reset_index()
-### </b>
-print(tabulate(output, headers='keys') )
-```
-
-## Distance flown distribution of each aircraft
-```{r, engine='python', comment='Python>', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE}
-### <b>
-output.distance.map(np.log).hist(nbins=100)
-### </b>
-```
-<img src="assets/log_distance_tailnum.png" width="500" />
-
-<!-- ![Log distance per aircraft](assets/log_distance_tailnum.png =600x500)-->
 
 # R-style formula in regression
-
 
 ## Which day of week to avoid delay
 
 Aim:
 
-Fit a model to check which day of week would be best to avoid delay, 
+Fit a model to determine which day of week would be best to avoid delay.
 
 Our plan:
 
-1. Group by each day and compute the proportion of flights delayed
-2. Tag the day of week (Mon, Tue, ...)
-3. Fit a linear regression with day of week as a factor.
+>0. Define late as a new column
+>1. Group by each day and compute the proportion of flights delayed
+>2. Tag the day of week (Mon, Tue, ...)
+>3. Fit a linear regression with day of week as a factor.
 
-## 
+## Prepare data
+
+1. Define late as departure 30 minutes later than scheduled
+2. Convert year, month, day into a single date field
 
 ```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+from datetime import datetime
+### <b>
+# Define late as departure 30 minutes later than expected
+alldata['is_late'] = (alldata['dep_delay']>30)
+# Convert year, month, day into a datetime object
+alldata['date'] = alldata.apply(
+    lambda x: datetime(x.year,x.month,x.day).date(), axis=1)
+###</b>
+```
+
+```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=TRUE, echo=FALSE, results='asis'}
 import sqlalchemy
 import pandas as pd
 from datetime import datetime 
+from tabulate import tabulate
+
+engine = sqlalchemy.create_engine('sqlite:///flightdata.sqlite3')
+alldata = pd.read_sql('select year, month, day, carrier, dep_delay from flights', engine)
+### <b>
+# Define late as departure 30 minutes later than expected
+alldata['is_late'] = (alldata['dep_delay']>30)
+# Convert year, month, day into a datetime object
+alldata['date'] = alldata.apply(
+    lambda x: datetime(x.year,x.month,x.day).date(), axis=1)
+# Compute the proportion of flights late on each day
+late_df = alldata.groupby('date')['is_late'].mean().reset_index()
+# Tag the date with a dayofweek tag
+late_df['dayofweek'] = late_df['date'].map(lambda x: x.isoweekday())
+###</b>
+print(tabulate(alldata.iloc[[1,2,85,96],:], headers='keys') )
+```
+
+## Group by date 
+```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+### <b>
+# Compute the proportion of flights late on each day
+late_df = alldata.groupby('date')['is_late'].mean().reset_index()
+###</b>
+print(late_df)
+```
+
+```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=TRUE, echo=FALSE, results='asis'}
+import sqlalchemy
+import pandas as pd
+from datetime import datetime 
+from tabulate import tabulate
 
 engine = sqlalchemy.create_engine('sqlite:///flightdata.sqlite3')
 alldata = pd.read_sql('select * from flights', engine)
@@ -393,6 +360,16 @@ alldata['date'] = alldata.apply(
     lambda x: datetime(x.year,x.month,x.day).date(), axis=1)
 # Compute the proportion of flights late on each day
 late_df = alldata.groupby('date')['is_late'].mean().reset_index()
+# Tag the date with a dayofweek tag
+#late_df['dayofweek'] = late_df['date'].map(lambda x: x.isoweekday())
+###</b>
+print(tabulate(late_df.head(10), headers='keys') )
+```
+
+## Tag day of week
+
+```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+### <b>
 # Tag the date with a dayofweek tag
 late_df['dayofweek'] = late_df['date'].map(lambda x: x.isoweekday())
 ###</b>
@@ -418,17 +395,19 @@ late_df = alldata.groupby('date')['is_late'].mean().reset_index()
 # Tag the date with a dayofweek tag
 late_df['dayofweek'] = late_df['date'].map(lambda x: x.isoweekday())
 ###</b>
-print(tabulate(late_df, headers='keys') )
+print(tabulate(late_df.head(10), headers='keys') )
 ```
 
-## R-style formula makes it easy to specify a regression model
+
+## Specify a regression model using formula
 
 ```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+import statsmodels.formula.api as smf
 ### <b>
 mod = smf.ols(formula=' is_late ~ C(dayofweek)', data=late_df)
+### </b>
 res = mod.fit()
 print(res.summary())
-### </b>
 ```
 
 
@@ -456,11 +435,43 @@ $$\text{Monday proportion delayed} = 0.1583 - 0.0254$$
 
 Saturday has significantly fewer delays than Monday.
 
-## Comparing other day of week
+
+# Questions?
+
+## Extra: do it with dplyr in R
+SQLAlchemy in Python vs dplyr in R
+
+```{r, warning=FALSE, eval=FALSE}
+library(dplyr)
+flightdb <- src_sqlite("./flightdata.sqlite3")
+flight_table <- tbl(flightdb, "flights")
+### <b>
+flight_table %>% 
+  arrange(desc(dep_delay)) %>% head(10)
+### </b>
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, results='asis'}
+library(dplyr)
+library(knitr)
+flightdb <- src_sqlite("./flightdata.sqlite3")
+flight_table <- tbl(flightdb, "flights")
+### <b>
+flight_table %>% 
+  select(year, month, day, carrier, dep_delay) %>%
+  arrange(desc(dep_delay)) %>% head(10) %>% kable()
+### </b>
+```
+
+
+
+## Extra - Comparing other day of week
 
 ```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+###<b>
 mod = smf.ols(formula=' is_late ~ C(dayofweek, levels=[6,1,2,3,4,5,7])',
               data=late_df)
+###</b>
 res = mod.fit()
 print(res.summary())
 ```
@@ -478,9 +489,9 @@ C(dayofweek, levels=[6, 1, 2, 3, 4, 5, 7])[T.5]  0.0613  0.017    3.510  0.001  
 C(dayofweek, levels=[6, 1, 2, 3, 4, 5, 7])[T.7]  0.0341  0.017    1.953  0.052  -0.000     0.069
 
 
-## Diagnostics
+## Extra - Diagnostics
 
-Quantile-Quantile plots to check normality of the residuals.
+[Quantile-Quantile plots](https://en.wikipedia.org/wiki/Q???Q_plot) to check normality of the residuals.
 
 ```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
 import statsmodels.api as sm
@@ -491,8 +502,15 @@ plt.show()
 
 <img src="./assets/normal_qqplot.png" height="300" />
 
-Exercise: 
+## Exercise
 
+The residuals are not quite normal. 
 
-# Thank you
+Exercise: taking log would help.  
+```{r, engine='python', engine.path='/Users/choy/anaconda/bin/python2.7', eval=FALSE, echo=TRUE, results='asis'}
+### <b>
+mod = smf.ols(formula=' np.log(is_late) ~ C(dayofweek)',
+              data=late_df)
+###</b>
+```
 
