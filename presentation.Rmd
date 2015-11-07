@@ -7,8 +7,7 @@ output: ioslides_presentation
 
 ## Using Python for Data Mining
 
-When you are stuck in front of a computer without internet access, 
-how you get some data out, play with it and gain some insights.  
+How you get some data from a database, play with it and gain some insights with Python.  
 
 
 Slides can be obtained here:
@@ -292,7 +291,7 @@ Fit a model to determine which day of week (Monday, Tuesday, ..., Sunday) would 
 
 Our plan:
 
->0. Define "late"" as a new column
+>0. Define "late as a new column
 >1. Compute the proportion of flights delayed by day
 >2. Tag Mon, Tue, ...
 >3. Fit a linear regression with day of week as a factor.
