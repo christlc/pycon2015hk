@@ -291,7 +291,7 @@ Fit a model to determine which day of week (Monday, Tuesday, ..., Sunday) would 
 
 Our plan:
 
->0. Define "late as a new column
+>0. Define "late" as a new column
 >1. Compute the proportion of flights delayed by day
 >2. Tag Mon, Tue, ...
 >3. Fit a linear regression with day of week as a factor.
