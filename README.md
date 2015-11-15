@@ -1,4 +1,4 @@
-# Using Python for Data Mining
+# Using Python for Data Mining Project
 
 This is the place for the slides and resources of the talk given for Pycon HK on 7 Nov 2015.
 
